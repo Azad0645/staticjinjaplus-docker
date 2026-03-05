@@ -1,0 +1,20 @@
+FROM python:3.10.19-slim-bookworm
+
+WORKDIR /app
+
+ARG APP_REF=main
+ARG APP_TARBALL_CHECKSUM
+ARG APP_TARBALL_URL="https://github.com/MrDave/StaticJinjaPlus/archive/${APP_REF}.tar.gz"
+
+ADD --checksum=${APP_TARBALL_CHECKSUM} ${APP_TARBALL_URL} /tmp/app.tar.gz
+
+RUN mkdir /tmp/src \
+ && tar -xzf /tmp/app.tar.gz -C /tmp/src --strip-components=1 \
+ && mv /tmp/src/* /app/ \
+ && rm -rf /tmp/app.tar.gz /tmp/src
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN if [ -d templates_example ] && [ ! -d templates ]; then mv templates_example templates; fi
+
+CMD ["python", "main.py"]
