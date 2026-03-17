@@ -3,7 +3,15 @@ FROM python:3.10.19-slim-bookworm
 WORKDIR /app
 
 ARG APP_REF=main
-ARG APP_TARBALL_CHECKSUM
+
+# Чексуммы архивов StaticJinjaPlus:
+#  - 0.1.0 : sha256:3555bcfd670e134e8360ad934cb5bad1bbe2a7dad24ba7cafa0a3bb8b23c6444
+#  - 0.1.1 : sha256:30d9424df1eddb73912b0e2ad5375fa2c876c8e30906bec91952dfb75dcf220b
+#  - main  : sha256:9adccb8fe17a40252df1a3acdea7edef4633b4ecaa8ba2dd5e0270f87ae43eab
+
+# По умолчанию используем checksum для main
+ARG APP_TARBALL_CHECKSUM="sha256:9adccb8fe17a40252df1a3acdea7edef4633b4ecaa8ba2dd5e0270f87ae43eab"
+
 ARG APP_TARBALL_URL="https://github.com/MrDave/StaticJinjaPlus/archive/${APP_REF}.tar.gz"
 
 ADD --checksum=${APP_TARBALL_CHECKSUM} ${APP_TARBALL_URL} /tmp/app.tar.gz
